@@ -7,8 +7,8 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  baseUrl = 'http://localhost:5000';
-  loginData = { username: 'Alex', password: '123123' };
+  private baseUrl = 'http://192.168.10.103:5000';
+  private userId: number | null = null;
 
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(
     this.hasToken()
@@ -21,12 +21,12 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  login(username: string, password: string): Observable<{ token: string }> {
+  login(credentials: {
+    username: string;
+    password: string;
+  }): Observable<{ token: string }> {
     return this.http
-      .post<{ token: string }>(`${this.baseUrl}/api/v1/login`, {
-        username,
-        password,
-      })
+      .post<{ token: string }>(`${this.baseUrl}/api/v1/login`, credentials)
       .pipe(
         tap((response) => {
           localStorage.setItem('token', response.token);
@@ -46,11 +46,35 @@ export class AuthService {
     return this.isAuthenticatedSubject.getValue();
   }
 
-  register(userDetails: any): Observable<any> {
+  register(userDetails: {
+    username: string;
+    password: string;
+    color: string;
+  }): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/v1/register`, userDetails);
   }
 
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  getCurrentUserId(): number | null {
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.userId = this.decodeToken(token)?.id || null;
+      return this.userId;
+    } else {
+      return null;
+    }
+  }
+
+  private decodeToken(token: string): any | null {
+    try {
+      const payload = token.split('.')[1]; // Extract the payload part of the JWT
+      return JSON.parse(atob(payload)); // Decode base64 and parse JSON
+    } catch (error) {
+      console.error('failed to decode token:', error);
+      return null;
+    }
   }
 }

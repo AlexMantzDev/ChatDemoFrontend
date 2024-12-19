@@ -1,0 +1,36 @@
+.chat-bubble {
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px 0;
+  word-wrap: break-word;
+  max-width: 60%;
+  width: fit-content;
+}
+
+.chat-bubble-wrapper {
+  width: 100%;
+}
+
+.chat-bubble strong {
+  font-weight: bold;
+}
+
+/* Align messages from the current user to the right */
+.current-user {
+  margin-left: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-self: flex-end; /* Pushes to the right */
+  background-color: #d1ffd6; /* Light green background */
+  text-align: right; /* Aligns text inside the bubble */
+}
+
+/* Align messages from other users to the left */
+.other-user {
+  display: flex;
+  justify-content: flex-start;
+  align-self: flex-start; /* Pushes to the left */
+  background-color: #f1f1f1; /* Light gray background */
+  text-align: left; /* Aligns text inside the bubble */
+}

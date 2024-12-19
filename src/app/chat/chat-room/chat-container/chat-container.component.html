@@ -1,1 +1,8 @@
-<p>hello</p>
+<div *ngFor="let msg of messages">
+  <app-chat-message
+    [username]="msg.User.username"
+    [color]="msg.User.color"
+    [message]="msg.message"
+    [userId]="msg.User.id"
+  ></app-chat-message>
+</div>

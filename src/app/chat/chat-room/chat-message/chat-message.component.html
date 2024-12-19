@@ -1,1 +1,9 @@
-<p>chat-message works!</p>
+<div class="chat-bubble-wrapper">
+  <div
+    [ngClass]="{ 'current-user': isCurrentUser, 'other-user': !isCurrentUser }"
+    class="chat-bubble"
+  >
+    <strong [style.color]="color">{{ username }}</strong
+    >: {{ message }}
+  </div>
+</div>
